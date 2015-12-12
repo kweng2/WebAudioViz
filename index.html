@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <script src="bower_components/jquery/jquery.min.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
+    <audio controls>
+        <source src = "sound.mp3" type = "audio/mpeg">
+    </audio>
+    <canvas width="640" height="360"></canvas>
+
+    <script>
+    $(function(){
+
+
+      var canvas = $('canvas')[0];
+      var canvasCtx = canvas.getContext('2d');
+      canvasCtx.fillStyle = "rgb(200,0,0)";  
+      var WIDTH = 640;
+      var HEIGHT = 360;
+      var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      var audioElement = $('audio')[0];
+      var source = audioCtx.createMediaElementSource(audioElement);
+      var analyser = audioCtx.createAnalyser();
+      
+      source.connect(audioCtx.destination);
+      source.connect(analyser);
+
+      var draw = function() {
+        var freqDomain = new Uint8Array(analyser.frequencyBinCount);
+        analyser.getByteFrequencyData(freqDomain);
+
+        canvasCtx.clearRect(0,0,WIDTH,HEIGHT);
+        for (var i = 0; i < analyser.frequencyBinCount; i++) {
+          var value = freqDomain[i];
+          var percent = value / 256;
+          var height = HEIGHT * percent;
+          var offset = HEIGHT - height - 1;
+          var barWidth = WIDTH/analyser.frequencyBinCount;
+          var hue = i/analyser.frequencyBinCount * 360;
+          canvasCtx.fillRect(i * barWidth, offset, barWidth, height);
+        }
+        window.requestAnimationFrame(draw);
+        
+      };
+      draw();
+    });
+    </script>
+  </body>
+</html>
