@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <script src="bower_components/jquery/jquery.min.js"></script>
-    <script src="bower_components/underscore/underscore.js"></script>
+    <script src="lib/jquery.js"></script>
     <audio controls>
         <source src = "sound.mp3" type = "audio/mpeg">
     </audio>
@@ -11,10 +10,8 @@
     <script>
     $(function(){
 
-
       var canvas = $('canvas')[0];
       var canvasCtx = canvas.getContext('2d');
-      canvasCtx.fillStyle = "rgb(200,0,0)";  
       var WIDTH = 640;
       var HEIGHT = 360;
       var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
